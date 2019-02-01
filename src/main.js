@@ -11,7 +11,8 @@ import FieldBoolean from './components/FieldBoolean';
 import FieldArray from './components/FieldArray';
 import FieldMap from './components/FieldMap';
 Vue.prototype.$axios = axios;
-
+let eventBus = new Vue({});
+Vue.prototype.$eventBus = eventBus;
 Vue.component('FieldString', FieldString);
 Vue.component('FieldNumber', FieldNumber);
 Vue.component('FieldDecimal', FieldDecimal);

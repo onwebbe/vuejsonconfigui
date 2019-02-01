@@ -44,10 +44,16 @@
   .mapField.jsonConfigField {
     margin-top: 5px;
   }
-} 
+}
 .displayJsonData {
   border-width: 0px;
   border-bottom-width: 1px;
   border-style: solid;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>

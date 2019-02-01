@@ -3,7 +3,7 @@
     <div>
       <input v-model="jsonURL"> <button @click="loadJson()">Load JSON</button>&nbsp;&nbsp;<button @click="getJson()">Get JSON</button>
       <br/>
-      
+      <button @click="doExpandAll(true)">expand all</button>&nbsp;<button @click="doExpandAll(false)">callaps all</button>
     </div>
     <div>
       <FieldMap fieldName="" v-model="jsonData"></FieldMap>
@@ -30,6 +30,9 @@ export default {
     }
   },
   methods: {
+    doExpandAll (isExpand) {
+      this.$eventBus.$emit('doExpand', isExpand);
+    },
     getJSONData () {
       return this.jsonData;
     },

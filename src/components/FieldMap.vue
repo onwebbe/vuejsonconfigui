@@ -15,11 +15,14 @@
       <button @click="addNewItem" class="backgroundColor okColor">+</button>
     </span>
   </div>
-  <div class="mapFieldValues" v-show="isExpanded">
-    <div v-for="(item, idx) in mapValue" v-bind:key="idx">
-      <component :is="Utils.checkFieldType(item)" :fieldName="idx.toString()" v-model="mapValue[idx]"></component>
+  <transition name="fade">
+    <div class="mapFieldValues" v-show="isExpanded">
+      <div v-for="(item, idx) in mapValue" v-bind:key="idx">
+        <component :is="Utils.checkFieldType(item)" :fieldName="idx.toString()" v-model="mapValue[idx]"></component>
+      </div>
     </div>
-  </div>
+  </transition>
+  
 </div>
 </template>
 
@@ -40,7 +43,11 @@ export default {
     }
   },
   created () {
+    let self = this;
     this.mapValue = this.value;
+    this.$eventBus.$on('doExpand', isExpand => {
+      self.doExpand(isExpand);
+    });
   },
   methods: {
     valueChanged () {
