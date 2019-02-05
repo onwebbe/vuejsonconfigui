@@ -1,10 +1,6 @@
 <template>
   <div class="displayJsonData borderColorNormal">
-    <div>
-      <input v-model="jsonURL"> <button @click="loadJson()">Load JSON</button>&nbsp;&nbsp;<button @click="getJson()">Get JSON</button>
-      <br/>
-      <button @click="doExpandAll(true)">expand all</button>&nbsp;<button @click="doExpandAll(false)">callaps all</button>
-    </div>
+    <button @click="saveJSONData()"> Save JSON config </button>
     <div>
       <FieldMap fieldName="" v-model="jsonData"></FieldMap>
     </div>
@@ -13,15 +9,19 @@
 
 <script>
 // @ is an alias to /src
-
+var qs = require('qs');
 export default {
   name: 'home',
   components: {
   },
+  created () {
+    this.loadJson();
+  },
   data () {
     return {
       jsonData: {},
-      jsonURL: null
+      jsonURL: '/api/vuedashboard/getDashBoardConfig',
+      saveJSONURL: '/api/vuedashboard/saveDashBoardConfig'
     }
   },
   watch: {
@@ -32,6 +32,13 @@ export default {
   methods: {
     doExpandAll (isExpand) {
       this.$eventBus.$emit('doExpand', isExpand);
+    },
+    saveJSONData () {
+      let self = this;
+      this.$axios.post(this.saveJSONURL,
+        qs.stringify({ 'data': JSON.stringify( self.jsonData )})).then(response => {
+        alert(response.data.message);
+      });
     },
     getJSONData () {
       return this.jsonData;
@@ -52,7 +59,7 @@ export default {
           let data = response.data;
           let jsonData = data.data;
           self.jsonData = jsonData;
-        })
+        });
       }
     },
     getJson () {
