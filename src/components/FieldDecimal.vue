@@ -1,5 +1,7 @@
 <template>
   <div class="decimalField jsonConfigField">
+    <button @click="removeItem" class="backgroundColor errorColor">-</button>
+    &nbsp;&nbsp;
     <label>{{fieldName}}: </label>
     <span @click="fieldClicked()" v-show="!isEditMode" class="borderColorNormal borderBottom editFieldOutline">
       {{value}}
@@ -30,6 +32,9 @@ export default {
       this.$nextTick(function () {
         $(self.$refs.inputfield).focus();
       });
+    },
+    removeItem () {
+      this.$emit('itemRemoved', this.fieldName);
     },
     valueChanged (event) {
       this.isEditMode = false;

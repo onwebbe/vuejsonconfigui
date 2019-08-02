@@ -7,7 +7,7 @@
     <span>
       &nbsp;&nbsp;
       <select v-model="selectedAddType">
-        <option v-for="item in Utils.getSupportedTypes()" :value="item">{{item}}</option>
+        <option v-for="(item, idx) in Utils.getSupportedTypes()" :value="item" v-bind:key="idx">{{item}}</option>
       </select>
       &nbsp;&nbsp;
       <input v-model.trim="fieldNameSelected" placeholder="Please input field name"/>
@@ -17,8 +17,8 @@
   </div>
   <transition name="fade">
     <div class="mapFieldValues" v-show="isExpanded">
-      <div v-for="(item, idx) in mapValue" v-bind:key="idx">
-        <component :is="Utils.checkFieldType(item)" :fieldName="idx.toString()" v-model="mapValue[idx]"></component>
+      <div v-for="(item, key) in mapValue" v-bind:key="key">
+        <component :is="Utils.checkFieldType(item)" :fieldName="key.toString()" v-model="mapValue[key]" @itemRemoved="onItemRemoved(key)"></component>
       </div>
     </div>
   </transition>
@@ -50,6 +50,12 @@ export default {
     });
   },
   methods: {
+    removeItem () {
+      this.$emit('itemRemoved', this.fieldName);
+    },
+    onItemRemoved (keyToRemove) {
+      this.$delete(this.mapValue, keyToRemove);
+    },
     valueChanged () {
       this.$emit('input', this.mapValue);
     },

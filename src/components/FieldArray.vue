@@ -7,16 +7,18 @@
     <span>
       &nbsp;&nbsp;
       <select v-model="selectedAddType">
-        <option v-for="item in Utils.getSupportedTypes()" :value="item">{{item}}</option>
+        <option v-for="(item, idx) in Utils.getSupportedTypes()" :value="item" v-bind:key="idx">{{item}}</option>
       </select>
       &nbsp;&nbsp;
       <button @click="addNewItem" class="backgroundColor okColor">+</button>
+      &nbsp;&nbsp;
+      <button @click="removeItem" class="backgroundColor errorColor" style="margin-left: 20px">-</button>
     </span>
   </div>
   <transition name="fade">
     <div class="arrayFieldValues" v-show="isExpanded">
       <div v-for="(item, idx) in arrayValue" v-bind:key="idx">
-        <component :is="Utils.checkFieldType(item)" :fieldName="'[' + idx.toString() + ']'" v-model="arrayValue[idx]"></component>
+        <component v-if="item != null" :is="Utils.checkFieldType(item)" :fieldName="'[' + idx.toString() + ']'" v-model="arrayValue[idx]" @itemRemoved="onItemRemoved(idx)"></component>
       </div>
     </div>
   </transition>
@@ -46,6 +48,12 @@ export default {
     });
   },
   methods: {
+    removeItem () {
+      this.$emit('itemRemoved', this.fieldName);
+    },
+    onItemRemoved (idx) {
+      this.$delete(this.arrayValue, idx);
+    },
     valueChanged () {
       this.$emit('input', this.arrayValue);
     },
